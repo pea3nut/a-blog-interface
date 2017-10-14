@@ -78,7 +78,7 @@ Return types: Same as `GET /post/all`
 - CategoryInfo.name {String} - the category name
 - CategoryInfo.alias {String(/^\w+$/)} - the category unique identifier
 - CategoryInfo.parent_alias {CategoryInfo.alias} - the category's parent category
-- CategoryInfo.children_alias {Array<CategoryInfo.alias>} - the category's child category
+- CategoryInfo.child_alias_list {Array<CategoryInfo.alias>} - the category's child category
 
 ## PostsInfo
 
