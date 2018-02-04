@@ -12,7 +12,7 @@ Get all tabs.
 Return types:
 
 - tag_length {Number}
-- tag {Object}
+- tag_map {Object}
     - key {String} [value].alias
     - value {TagInfo}
 
@@ -23,7 +23,7 @@ Get all category.
 Return types:
 
 - category_length {Number}
-- category {Object}
+- category_map {Object}
     - key {String} [value].alias
     - value {CategoryInfo}
 
@@ -44,7 +44,9 @@ Get posts list.
 Return types:
 
 - posts_length {Number}
-- posts_list {Array<PostsInfo(-PostsInfo.md_content)>}
+- posts_map {Object}
+  - key {String} [value].posts_id
+  - value {PostsInfo(-PostsInfo.md_content}
 
 ## GET /tag/:tag_alias
 
