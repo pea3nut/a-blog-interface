@@ -1,65 +1,65 @@
 /**
- * @version 1.0-alpha.2
+ * @version 1.0-alpha.3
  * */
 
 
 
 // APIs
 
-declare namespace Get{
-    namespace tag{
-        namespace all{
-            interface response extends ApiResponse{
+export namespace Get{
+    export namespace tag{
+        export namespace all{
+            export interface response extends ApiResponse{
                 tag_length:number;
-                tag_map :{
-                    [alias in TagAlias] :TagInfo;
-                };
+                tag_map :IndexMap<TagAlias,TagInfo>;
             }
-            interface call{
+            export interface call{
                 ():response;
             }
         }
-        interface response extends Get.posts.all.response{}
-        interface call{
+        export interface response extends Get.posts.all.response{
+            errcode :ResponseErrcode
+        }
+        export interface call{
             (tag_alias :TagAlias):response;
         }
     }
-    namespace category{
-        namespace all{
-            interface response extends ApiResponse{
+    export namespace category{
+        export namespace all{
+            export interface response extends ApiResponse{
                 errcode :0|1;
                 category_length:number;
-                category_map :{
-                    [alias in CategoryAlias] :CategoryInfo;
-                };
+                category_map :IndexMap<CategoryAlias,CategoryInfo>;
             }
-            interface call{
+            export interface call{
                 ():response;
             }
         }
-        interface response extends Get.posts.all.response{}
-        interface call{
+        export interface response extends Get.posts.all.response{}
+        export interface call{
             (category_alias :CategoryAlias):response;
         }
     }
-    namespace posts{
-        namespace all{
-            interface response extends ApiResponse{
+    export namespace posts{
+        export namespace all{
+            export interface response extends ApiResponse{
                 posts_length:number;
-                posts_map :{
-                    [alias in ToString<PostsId>] :PostsInfoWithoutContent;
-                };
+                posts_map :IndexMap<ToString<PostsId>,PostsInfoWithoutContent>;
             }
-            interface call{
+            export interface call{
                 ():response;
             }
         }
-        interface response extends ApiResponse,PostsInfo{}
-        interface call{
+        export interface response extends ApiResponse,PostsInfo{
+            errcode :ResponseSuccessErrcode;
+        }
+        export interface call{
             (posts_id:PostsId):response;
         }
     }
 }
+
+
 
 
 
@@ -71,28 +71,51 @@ declare namespace Get{
  * @property {ResponseErrcode} errcode - The state of request.
  * @property {string}          errmsg  - The message for debugging.
  * */
-declare interface ApiResponse{
+export interface ApiResponse{
     errcode :ResponseErrcode;
     errmsg  :string;
 }
-declare interface ApiResponseError{
-    errcode :ResponseErrcode;//todo: -0
+/**
+ * Like ApiResponse, but be limited in the case when some errors have occurred.
+ * @typedef {Object} ApiErrorResponse
+ * */
+export interface ApiErrorResponse{
+    errcode :ResponseErrorErrcode;
     errmsg  :string;
 }
 /**
- * It has the following values:
- * - ok -> 0
- * - error -> 1
- * @typedef {number} ResponseErrcode
+ * The map of all case of ApiResponse.errcode.
+ * @typedef {object} ResponseErrcode
  * */
-declare type ResponseErrcode =0|1;
+export enum ResponseErrcode{
+    Ok=0,
+    Error=1,
+    TagNotFound=201,
+    PostsNotFound=202,
+    CategoryNotFound=203,
+}
+/**
+ * All success case of ApiResponse.errcode.
+ * @typedef {number} ResponseSuccessErrcode
+ * */
+export type ResponseSuccessErrcode =ResponseErrcode.Ok;
+/**
+ * All fail case of ApiResponse.errcode.
+ * @typedef {number} ResponseSuccessErrcode
+ * */
+export type ResponseErrorErrcode=
+    ResponseErrcode.Error
+    | ResponseErrcode.TagNotFound
+    | ResponseErrcode.PostsNotFound
+    | ResponseErrcode.CategoryNotFound
+;
 /**
  * A tag.
  * @typedef {Object} TagInfo
  * @property {string} name - The name of tag.
  * @property {TagAlias} alias - The name of tag stand in the program, to be used as identifier.
  * */
-declare interface TagInfo{
+export interface TagInfo{
     name  :string;
     alias :TagAlias;
 }
@@ -100,7 +123,7 @@ declare interface TagInfo{
  * @typedef {string} TagAlias
  * Conform to /^\w+$/
  * */
-declare type TagAlias =string;
+export type TagAlias =string;
 /**
  * A Category.
  * @typedef {Object} CategoryInfo
@@ -109,7 +132,7 @@ declare type TagAlias =string;
  * @property {CategoryAlias|null}   parent_alias - The alias of parent of this category.
  * @property {CategoryAlias[]}      child_alias_list  - The aliases of children of this category.
  * */
-declare interface CategoryInfo{
+export interface CategoryInfo{
     name  :string;
     alias :CategoryAlias;
     parent_alias :CategoryAlias|null;
@@ -119,7 +142,7 @@ declare interface CategoryInfo{
  * @typedef {string} CategoryAlias
  * Conform to /^\w+$/
  * */
-declare type CategoryAlias =string;
+export type CategoryAlias =string;
 /**
  * A posts.
  * @typedef {Object} PostsInfoWithoutContent
@@ -132,10 +155,10 @@ declare type CategoryAlias =string;
  * @property {Date}            update_time
  * @property {Date}            create_time
  * */
-declare interface PostsInfo extends PostsInfoWithoutContent{//todo: Maybe has the better way.
+export interface PostsInfo extends PostsInfoWithoutContent{//todo: Maybe has the better way.
     md_content    :string;
 }
-declare interface PostsInfoWithoutContent{
+export interface PostsInfoWithoutContent{
     id            :PostsId;
     title         :string;
     description   :string;
@@ -144,10 +167,13 @@ declare interface PostsInfoWithoutContent{
     update_time   :Date;
     create_time   :Date;
 }
-declare type PostsId =number;
+export type PostsId =number;
 
 
 
 // utils
 
-type ToString<T> =string;
+export type ToString<T> =string;
+export type IndexMap<K extends string,V> ={
+    [key in K] :V;
+};

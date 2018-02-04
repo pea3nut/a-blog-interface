@@ -1,4 +1,5 @@
-/// <reference path="index.d.ts" />
+import {Get} from "./index";
+
 
 var api :Get.tag.all.call =function(){
     return {

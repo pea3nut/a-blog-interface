@@ -1,0 +1,19 @@
+{
+  "name": "a-blog-interface",
+  "version": "1.0.0-alpha.3",
+  "description": "Every interface return types includes:",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pea3nut/a-blog-interface.git"
+  },
+  "author": "pea3nut",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/pea3nut/a-blog-interface/issues"
+  },
+  "homepage": "https://github.com/pea3nut/a-blog-interface#readme"
+}
